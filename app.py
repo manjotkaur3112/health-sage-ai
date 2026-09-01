@@ -1,22 +1,12 @@
 import streamlit as st
+from healthsage import analyze_health
 
-from backend import analyze_health
-
-
-# =========================================================
-# PAGE CONFIGURATION
-# =========================================================
 
 st.set_page_config(
     page_title="HealthSage AI",
     page_icon="🏥",
     layout="wide"
 )
-
-
-# =========================================================
-# CUSTOM CSS
-# =========================================================
 
 st.markdown("""
 <style>
@@ -26,10 +16,6 @@ st.markdown("""
 * {
     font-family: 'Inter', sans-serif;
 }
-
-/* =====================================================
-   MAIN PAGE
-   ===================================================== */
 
 .stApp {
     background:
@@ -43,11 +29,6 @@ st.markdown("""
     padding-bottom: 3rem;
     max-width: 1100px;
 }
-
-
-/* =====================================================
-   HERO SECTION
-   ===================================================== */
 
 .hero {
     text-align: center;
@@ -127,10 +108,6 @@ st.markdown("""
 }
 
 
-/* =====================================================
-   SECTION LABELS
-   ===================================================== */
-
 .section-label {
     font-family: 'Sora', sans-serif;
     font-size: 15px;
@@ -142,11 +119,6 @@ st.markdown("""
     align-items: center;
     gap: 8px;
 }
-
-
-/* =====================================================
-   INFORMATION CARDS
-   ===================================================== */
 
 .info-card {
     background:
@@ -184,11 +156,6 @@ st.markdown("""
     margin-top: 8px;
 }
 
-
-/* =====================================================
-   SUMMARY CARD
-   ===================================================== */
-
 .summary-card {
     background:
         linear-gradient(
@@ -222,10 +189,6 @@ st.markdown("""
 }
 
 
-/* =====================================================
-   CATEGORY CARDS
-   ===================================================== */
-
 .category-card {
     background:
         linear-gradient(
@@ -253,10 +216,6 @@ st.markdown("""
 .prevention-card { border-top: 3px solid #34d399; }
 
 
-/* =====================================================
-   CATEGORY TITLES
-   ===================================================== */
-
 .category-title {
     font-family: 'Sora', sans-serif;
     font-size: 17px;
@@ -270,10 +229,6 @@ st.markdown("""
 .cause-title { color: #fb923c; }
 .prevention-title { color: #34d399; }
 
-
-/* =====================================================
-   LISTS
-   ===================================================== */
 
 .item-list {
     list-style: none;
@@ -302,10 +257,6 @@ st.markdown("""
 .prevention-list li::before { color: #34d399; }
 
 
-/* =====================================================
-   NO INFORMATION MESSAGE
-   ===================================================== */
-
 .no-info {
     color: #64748b;
     font-size: 14px;
@@ -313,10 +264,6 @@ st.markdown("""
     font-style: italic;
 }
 
-
-/* =====================================================
-   KEYWORDS
-   ===================================================== */
 
 .keyword {
     display: inline-block;
@@ -337,10 +284,6 @@ st.markdown("""
     transform: translateY(-2px);
 }
 
-
-/* =====================================================
-   BUTTON
-   ===================================================== */
 
 div.stButton > button {
     background: linear-gradient(135deg, #0ea5e9 0%, #10b981 100%);
@@ -365,11 +308,6 @@ div.stButton > button:active {
     transform: translateY(0px);
 }
 
-
-/* =====================================================
-   TEXT AREA
-   ===================================================== */
-
 .stTextArea textarea {
     background-color: rgba(30, 41, 59, 0.55) !important;
     color: #f8fafc !important;
@@ -386,18 +324,9 @@ div.stButton > button:active {
 }
 
 
-/* =====================================================
-   ALERTS
-   ===================================================== */
-
 div[data-testid="stAlert"] {
     border-radius: 14px;
 }
-
-
-/* =====================================================
-   FOOTER
-   ===================================================== */
 
 .footer {
     text-align: center;
@@ -417,10 +346,6 @@ div[data-testid="stAlert"] {
 """, unsafe_allow_html=True)
 
 
-# =========================================================
-# HEADER
-# =========================================================
-
 st.markdown("""
 <div class="hero">
     <h1>🏥 HealthSage</h1>
@@ -435,19 +360,10 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# =========================================================
-# DISCLAIMER
-# =========================================================
-
 st.info(
     "HealthSage provides general educational information only. "
     "It does not diagnose medical conditions or replace professional medical advice."
 )
-
-
-# =========================================================
-# INPUT SECTION
-# =========================================================
 
 st.markdown('<div class="section-label">📝 Enter Health Information</div>', unsafe_allow_html=True)
 
@@ -467,80 +383,36 @@ para = st.text_area(
 )
 
 
-# =========================================================
-# ANALYZE BUTTON
-# =========================================================
-
 analyze = st.button(
     "🔍 Analyze with HealthSage",
     use_container_width=True
 )
 
 
-# =========================================================
-# ANALYSIS
-# =========================================================
 
 if analyze:
-
-    # -----------------------------------------------------
-    # CHECK EMPTY INPUT
-    # -----------------------------------------------------
-
     if not para.strip():
-
         st.warning(
             "Please enter some health-related information."
         )
-
     else:
-
-        # -------------------------------------------------
-        # CALL BACKEND
-        # -------------------------------------------------
-
         with st.spinner(
             "HealthSage is analyzing your information..."
         ):
-
             health_data = analyze_health(para)
 
-
-        # -------------------------------------------------
-        # ERROR HANDLING
-        # -------------------------------------------------
-
         if "error" in health_data:
-
             st.error(
                 health_data["error"]
             )
-
         else:
-
             st.success(
                 "Analysis completed successfully!"
             )
-
-
-            # =================================================
-            # HEALTH INFORMATION
-            # =================================================
-
             st.markdown('<div class="section-label">🩺 Health Information</div>', unsafe_allow_html=True)
-
-
             col1, col2 = st.columns(2)
-
-
-            # -------------------------------------------------
-            # TOPIC
-            # -------------------------------------------------
-
             with col1:
-
                 topic = health_data.get("topic") or "Not available"
-
                 st.markdown(
                     f"""
                     <div class="info-card">
@@ -551,15 +423,8 @@ if analyze:
                     unsafe_allow_html=True
                 )
 
-
-            # -------------------------------------------------
-            # CONDITION
-            # -------------------------------------------------
-
             with col2:
-
                 condition = health_data.get("condition") or "Not available"
-
                 st.markdown(
                     f"""
                     <div class="info-card">
@@ -569,17 +434,9 @@ if analyze:
                     """,
                     unsafe_allow_html=True
                 )
-
-
-            # =================================================
-            # SUMMARY
-            # =================================================
-
             summary = health_data.get("summary") or "No summary available."
-
             if isinstance(summary, list):
                 summary = " ".join(str(item) for item in summary)
-
             st.markdown(
                 f"""
                 <div class="summary-card">
@@ -590,11 +447,6 @@ if analyze:
                 unsafe_allow_html=True
             )
 
-
-            # =================================================
-            # SYMPTOMS / CAUSES / PREVENTION
-            # =================================================
-
             st.markdown('<div class="section-label">🔎 Breakdown</div>', unsafe_allow_html=True)
 
             col1, col2, col3 = st.columns(3)
@@ -602,19 +454,11 @@ if analyze:
             symptoms = health_data.get("symptoms", [])
             causes = health_data.get("causes", [])
             prevention = health_data.get("prevention", [])
-
-
-            # =================================================
-            # FUNCTION TO CREATE LIST
-            # =================================================
-
+            
             def create_list(items, list_class, bullet_color):
-
                 if not items:
                     return '<p class="no-info">No information available.</p>'
-
                 html = f'<ul class="item-list {list_class}">'
-
                 for item in items:
                     html += f"""
                     <li>
@@ -622,20 +466,11 @@ if analyze:
                         {item}
                     </li>
                     """
-
                 html += "</ul>"
-
                 return html
 
-
-            # =================================================
-            # SYMPTOMS CARD
-            # =================================================
-
             with col1:
-
                 symptoms_html = create_list(symptoms, "symptom-list", "#f87171")
-
                 st.markdown(
                     f"""
                     <div class="category-card symptom-card">
@@ -646,15 +481,8 @@ if analyze:
                     unsafe_allow_html=True
                 )
 
-
-            # =================================================
-            # CAUSES CARD
-            # =================================================
-
             with col2:
-
                 causes_html = create_list(causes, "cause-list", "#fb923c")
-
                 st.markdown(
                     f"""
                     <div class="category-card cause-card">
@@ -665,15 +493,8 @@ if analyze:
                     unsafe_allow_html=True
                 )
 
-
-            # =================================================
-            # PREVENTION CARD
-            # =================================================
-
             with col3:
-
                 prevention_html = create_list(prevention, "prevention-list", "#34d399")
-
                 st.markdown(
                     f"""
                     <div class="category-card prevention-card">
@@ -683,44 +504,20 @@ if analyze:
                     """,
                     unsafe_allow_html=True
                 )
-
-
-            # =================================================
-            # KEYWORDS
-            # =================================================
-
             st.markdown('<div class="section-label">🔑 Keywords</div>', unsafe_allow_html=True)
-
             keywords = health_data.get("keywords", [])
-
             if keywords:
-
                 keyword_html = "".join(
                     f'<span class="keyword">{keyword}</span>' for keyword in keywords
                 )
-
                 st.markdown(keyword_html, unsafe_allow_html=True)
-
             else:
-
                 st.markdown(
                     '<p class="no-info">No keywords available.</p>',
                     unsafe_allow_html=True
                 )
-
-
-            # =================================================
-            # JSON RESPONSE
-            # =================================================
-
             with st.expander("📄 View JSON Response"):
-
                 st.json(health_data)
-
-
-# =========================================================
-# FOOTER
-# =========================================================
 
 st.markdown("""
 <div class="footer">
